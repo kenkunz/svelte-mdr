@@ -1,2 +1,21 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://svelte.dev/docs/kit">svelte.dev/docs/kit</a> to read the documentation</p>
+<script>
+	import Header from '$lib/components/Header.svelte';
+	import DataField from '$lib/components/DataField.svelte';
+	import Bins from '$lib/components/Bins.svelte';
+	import Footer from '$lib/components/Footer.svelte';
+</script>
+
+<main>
+	<Header />
+	<DataField />
+	<Bins />
+	<Footer />
+</main>
+
+<style>
+	main {
+		height: 100vh;
+		display: grid;
+		grid-template-rows: 12rem auto 10rem 4rem;
+	}
+</style>
