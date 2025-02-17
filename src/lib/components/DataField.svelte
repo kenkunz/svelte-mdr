@@ -6,7 +6,7 @@
 
 <style>
 	section {
-		margin-block: 0.75rem;
+		margin-block: 0.5rem;
 		border-block: 4px solid currentColor;
 		display: flex;
 		flex-wrap: wrap;

@@ -16,6 +16,5 @@
 	main {
 		height: 100vh;
 		display: grid;
-		grid-template-rows: 12rem auto 10rem 4rem;
 	}
 </style>

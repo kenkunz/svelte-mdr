@@ -2,8 +2,9 @@
 
 <style>
 	footer {
+		height: 3rem;
 		display: grid;
 		place-content: center;
-		font-size: 2rem;
+		font-size: 1.5rem;
 	}
 </style>
