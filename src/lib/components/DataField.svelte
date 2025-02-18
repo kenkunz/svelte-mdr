@@ -1,4 +1,8 @@
 <script>
+	const gridSize = [ 100, 100 ];
+	const translatePx = 250;
+	const zoomRatio = 1.2;
+
 	let numbers = $state([]);
 
 	let x = $state(0);
@@ -6,21 +10,21 @@
 	let z = $state(1);
 
 	$effect(() => {
-		numbers = Array(500);
+		numbers = Array(gridSize[0] * gridSize[1]);
 	});
 
 	function handleKeyUp({ key }) {
 		// prettier-ignore
 		switch (key) {
-			case 'ArrowRight' : return x -= 150;
-			case 'ArrowLeft'  : return x += 150;
-			case 'ArrowUp'    : return y += 150;
-			case 'ArrowDown'  : return y -= 150;
+			case 'ArrowRight' : return x -= translatePx;
+			case 'ArrowLeft'  : return x += translatePx;
+			case 'ArrowUp'    : return y += translatePx;
+			case 'ArrowDown'  : return y -= translatePx;
 
-			case '=' : return z *= 1.2;
-			case '+' : return z *= 1.2;
-			case '-' : return z /= 1.2;
-			case '_' : return z /= 1.2;
+			case '=' : return z *= zoomRatio;
+			case '+' : return z *= zoomRatio;
+			case '-' : return z /= zoomRatio;
+			case '_' : return z /= zoomRatio;
 			case '0' : return z = 1;
 		}
 	}
@@ -28,7 +32,7 @@
 
 <svelte:document onkeyup={handleKeyUp} />
 
-<section style:--x="{x}px" style:--y="{y}px" style:--scale={z}>
+<section style:--cols={gridSize[0]} style:--x="{x}px" style:--y="{y}px" style:--scale={z}>
 	<div class="inner">
 		{#each numbers}
 			<div class="number">
@@ -50,7 +54,7 @@
 
 	.inner {
 		display: grid;
-		grid-template-columns: repeat(25, 1fr);
+		grid-template-columns: repeat(var(--cols), 1fr);
 		transform: scale(var(--scale)) translate(var(--x), var(--y));
 		transition: transform 0.4s ease-out;
 	}
