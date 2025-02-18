@@ -3,6 +3,7 @@
 
 	let x = $state(0);
 	let y = $state(0);
+	let z = $state(1);
 
 	$effect(() => {
 		numbers = Array(500);
@@ -15,16 +16,24 @@
 			case 'ArrowLeft'  : return x += 150;
 			case 'ArrowUp'    : return y += 150;
 			case 'ArrowDown'  : return y -= 150;
+
+			case '=' : return z *= 1.2;
+			case '+' : return z *= 1.2;
+			case '-' : return z /= 1.2;
+			case '_' : return z /= 1.2;
+			case '0' : return z = 1;
 		}
 	}
 </script>
 
 <svelte:document onkeyup={handleKeyUp} />
 
-<section style:--x="{x}px" style:--y="{y}px">
+<section style:--x="{x}px" style:--y="{y}px" style:--scale={z}>
 	<div class="inner">
 		{#each numbers}
-			<div class="number">{Math.floor(Math.random() * 10)}</div>
+			<div class="number">
+				{Math.floor(Math.random() * 10)}
+			</div>
 		{/each}
 	</div>
 </section>
@@ -42,7 +51,7 @@
 	.inner {
 		display: grid;
 		grid-template-columns: repeat(25, 1fr);
-		transform: translate(var(--x), var(--y));
+		transform: scale(var(--scale)) translate(var(--x), var(--y));
 		transition: transform 0.4s ease-out;
 	}
 
