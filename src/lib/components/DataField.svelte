@@ -1,5 +1,7 @@
 <script>
-	const gridSize = [ 100, 100 ];
+	import Number from '$lib/components/Number.svelte';
+
+	const gridSize = [50, 50];
 	const translatePx = 250;
 	const zoomRatio = 1.2;
 
@@ -35,9 +37,7 @@
 <section style:--cols={gridSize[0]} style:--x="{x}px" style:--y="{y}px" style:--scale={z}>
 	<div class="inner">
 		{#each numbers}
-			<div class="number">
-				{Math.floor(Math.random() * 10)}
-			</div>
+			<Number />
 		{/each}
 	</div>
 </section>
@@ -57,14 +57,5 @@
 		grid-template-columns: repeat(var(--cols), 1fr);
 		transform: scale(var(--scale)) translate(var(--x), var(--y));
 		transition: transform 0.4s ease-out;
-	}
-
-	.number {
-		width: 5rem;
-		height: 5rem;
-		display: grid;
-		place-content: center;
-		font-size: 1.25rem;
-		font-weight: 300;
 	}
 </style>
