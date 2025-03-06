@@ -1,15 +1,14 @@
 <script>
+	import { gridSize, translatePx, zoomRatio } from '$lib/settings';
 	import Number from '$lib/components/Number.svelte';
-
-	const gridSize = [50, 50];
-	const translatePx = 250;
-	const zoomRatio = 1.2;
 
 	let numbers = $state([]);
 
 	let x = $state(0);
 	let y = $state(0);
 	let z = $state(1);
+
+	let cursor = $state({ x: 0, y: 0 });
 
 	$effect(() => {
 		numbers = Array(gridSize[0] * gridSize[1]);
@@ -30,14 +29,19 @@
 			case '0' : return z = 1;
 		}
 	}
+
+	function handlePointerMove(event) {
+		cursor.x = event.clientX;
+		cursor.y = event.clientY;
+	}
 </script>
 
-<svelte:document onkeyup={handleKeyUp} />
+<svelte:document onkeyup={handleKeyUp} onpointermove={handlePointerMove} />
 
 <section style:--cols={gridSize[0]} style:--x="{x}px" style:--y="{y}px" style:--scale={z}>
 	<div class="inner">
 		{#each numbers}
-			<Number />
+			<Number {cursor} />
 		{/each}
 	</div>
 </section>
