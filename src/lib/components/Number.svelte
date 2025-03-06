@@ -4,17 +4,15 @@
 
 	let { cursor } = $props();
 
-	let el;
+	let element;
+	let scale = $derived.by(() => getScale(element, cursor));
 
 	const value = randomInt(0, 9);
 	const range = Math.random() * 15;
 	const duration = randomInt(1000, 5000);
 	const axis = randomInt(0, 1) ? 'x' : 'y';
 
-	let scale = $derived.by(() => {
-		// reference cursor before (!el) so the dependency is tracked!
-		const { x, y } = cursor;
-
+	function getScale(el, { x, y }) {
 		if (!el) return 1;
 
 		const rect = el.getBoundingClientRect();
@@ -33,11 +31,11 @@
 
 		// apply scaleRatio up to maxScale
 		return 1 + (maxScale - 1) * scaleRatio;
-	});
+	}
 </script>
 
 <div
-	bind:this={el}
+	bind:this={element}
 	class={axis}
 	style:--range="{range}%"
 	style:--duration="{duration}ms"
