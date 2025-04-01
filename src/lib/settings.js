@@ -5,6 +5,7 @@ export const gridSize = [50, 50];
 export const translatePx = 250;
 export const zoomRatio = 1.2;
 
-// Cursor hovor magnification
+// Number hover/select magnification
 export const cursorRadius = 250;
 export const maxScale = 3;
+export const selectedScale = 3.75;

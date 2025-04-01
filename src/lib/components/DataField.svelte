@@ -1,4 +1,5 @@
 <script>
+	import { SvelteSet } from 'svelte/reactivity';
 	import { gridSize, translatePx, zoomRatio } from '$lib/settings';
 	import Number from '$lib/components/Number.svelte';
 
@@ -9,6 +10,8 @@
 	let z = $state(1);
 
 	let cursor = $state({ x: 0, y: 0 });
+
+	let selected = new SvelteSet();
 
 	$effect(() => {
 		numbers = Array(gridSize[0] * gridSize[1]);
@@ -27,6 +30,8 @@
 			case '-' : return z /= zoomRatio;
 			case '_' : return z /= zoomRatio;
 			case '0' : return z = 1;
+
+			case 'Escape' : return selected.clear();
 		}
 	}
 
@@ -34,14 +39,29 @@
 		cursor.x = event.clientX;
 		cursor.y = event.clientY;
 	}
+
+	function selectNumber({ target, buttons }) {
+		const { index } = target?.dataset ?? {};
+		if (buttons && index) {
+			selected.add(parseInt(index));
+		}
+	}
 </script>
 
-<svelte:document onkeyup={handleKeyUp} onpointermove={handlePointerMove} />
+<svelte:document onkeyup={handleKeyUp} onpointerdowncapture={() => selected.clear()} />
 
-<section style:--cols={gridSize[0]} style:--x="{x}px" style:--y="{y}px" style:--scale={z}>
+<section
+	style:--cols={gridSize[0]}
+	style:--x="{x}px"
+	style:--y="{y}px"
+	style:--scale={z}
+	onpointermove={handlePointerMove}
+	onpointerdown={selectNumber}
+	onpointerover={selectNumber}
+>
 	<div class="inner">
-		{#each numbers}
-			<Number {cursor} />
+		{#each numbers as _, index}
+			<Number {index} {cursor} selected={selected.has(index)} />
 		{/each}
 	</div>
 </section>
@@ -54,6 +74,9 @@
 		display: grid;
 		place-content: center;
 		overflow: hidden;
+		user-select: none;
+		-webkit-user-select: none;
+		pointer-events: none;
 	}
 
 	.inner {

@@ -1,8 +1,8 @@
 <script>
-	import { cursorRadius, maxScale } from '$lib/settings';
+	import { cursorRadius, maxScale, selectedScale } from '$lib/settings';
 	import { randomInt } from '$lib/helpers';
 
-	let { cursor } = $props();
+	let { index, cursor, selected } = $props();
 
 	let element;
 	let scale = $derived.by(() => getScale(element, cursor));
@@ -14,6 +14,8 @@
 
 	function getScale(el, { x, y }) {
 		if (!el) return 1;
+
+		if (selected) return selectedScale;
 
 		const rect = el.getBoundingClientRect();
 
@@ -34,24 +36,30 @@
 	}
 </script>
 
-<div
-	bind:this={element}
-	class={axis}
-	style:--range="{range}%"
-	style:--duration="{duration}ms"
-	style:--number-scale={scale}
->
-	<span>{value}</span>
+<div bind:this={element} class="data-field-cell" data-index={index}>
+	<div
+		class={['movement', axis]}
+		style:--range="{range}%"
+		style:--duration="{duration}ms"
+		style:--number-scale={scale}
+	>
+		<div class="scale">{value}</div>
+	</div>
 </div>
 
 <style>
 	div {
+		display: grid;
+	}
+
+	.data-field-cell {
 		width: 5rem;
 		height: 5rem;
-		display: grid;
-		place-content: center;
-		font-size: 1.25rem;
-		font-weight: 300;
+		pointer-events: auto;
+	}
+
+	.movement {
+		pointer-events: none;
 		animation: var(--duration) infinite alternate linear;
 		--range-neg: calc(-1 * var(--range));
 
@@ -62,11 +70,14 @@
 		&.y {
 			animation-name: y-axis;
 		}
+	}
 
-		span {
-			transform: scale(var(--number-scale));
-			transition: transform 0.5s ease-out;
-		}
+	.scale {
+		place-content: center;
+		font-size: 1.25rem;
+		font-weight: 300;
+		transform: scale(var(--number-scale));
+		transition: transform 0.5s ease-out;
 	}
 
 	@keyframes x-axis {
