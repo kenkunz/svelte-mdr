@@ -1,7 +1,7 @@
 <script>
 	import { SvelteSet } from 'svelte/reactivity';
 	import { gridSize, translatePx, zoomRatio } from '$lib/settings';
-	import Number from '$lib/components/Number.svelte';
+	import DataCell from '$lib/components/DataCell.svelte';
 
 	let numbers = $state([]);
 
@@ -14,7 +14,7 @@
 	let selected = new SvelteSet();
 
 	$effect(() => {
-		numbers = Array(gridSize[0] * gridSize[1]);
+		numbers = Array.from({ length: gridSize[0] * gridSize[1] });
 	});
 
 	function handleKeyUp({ key }) {
@@ -40,10 +40,10 @@
 		cursor.y = event.clientY;
 	}
 
-	function selectNumber({ target, buttons }) {
+	function selectCell({ target, buttons }) {
 		const { index } = target?.dataset ?? {};
 		if (buttons && index) {
-			selected.add(parseInt(index));
+			selected.add(Number(index));
 		}
 	}
 </script>
@@ -56,12 +56,12 @@
 	style:--y="{y}px"
 	style:--scale={z}
 	onpointermove={handlePointerMove}
-	onpointerdown={selectNumber}
-	onpointerover={selectNumber}
+	onpointerdown={selectCell}
+	onpointerover={selectCell}
 >
 	<div class="inner">
 		{#each numbers as _, index}
-			<Number {index} {cursor} selected={selected.has(index)} />
+			<DataCell {index} {cursor} selected={selected.has(index)} />
 		{/each}
 	</div>
 </section>
