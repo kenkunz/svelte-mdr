@@ -16,7 +16,7 @@
 	main {
 		height: 100vh;
 		display: grid;
-		grid-template-rows: 14rem 1fr 10rem 4rem;
+		grid-template-rows: 12rem 1fr 9rem 4rem;
 		--border: 4px solid currentColor;
 	}
 </style>
