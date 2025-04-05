@@ -1,7 +1,7 @@
 <script>
 	import { SvelteSet } from 'svelte/reactivity';
 	import { gridSize, translatePx, zoomRatio } from '$lib/settings';
-	import DataCell from '$lib/components/DataCell.svelte';
+	import DataCell from './DataCell.svelte';
 
 	let numbers = $state([]);
 
@@ -68,9 +68,8 @@
 
 <style>
 	section {
-		margin-block: 0.5rem;
-		border-block: 4px solid currentColor;
-		height: calc(100% - 1rem);
+		border-block: var(--border);
+		margin-block: 6px;
 		display: grid;
 		place-content: center;
 		overflow: hidden;

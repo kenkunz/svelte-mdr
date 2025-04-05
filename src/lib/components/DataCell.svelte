@@ -36,7 +36,7 @@
 	}
 </script>
 
-<div bind:this={element} class="data-field-cell" data-index={index}>
+<div bind:this={element} class="data-cell" data-index={index}>
 	<div
 		class={['movement', axis]}
 		style:--range="{range}%"
@@ -52,7 +52,7 @@
 		display: grid;
 	}
 
-	.data-field-cell {
+	.data-cell {
 		width: 5rem;
 		height: 5rem;
 		pointer-events: auto;
