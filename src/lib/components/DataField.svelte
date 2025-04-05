@@ -3,7 +3,7 @@
 	import { gridSize, translatePx, zoomRatio } from '$lib/settings';
 	import DataCell from './DataCell.svelte';
 
-	let numbers = $state([]);
+	let cells = $state([]);
 
 	let x = $state(0);
 	let y = $state(0);
@@ -14,7 +14,7 @@
 	let selected = new SvelteSet();
 
 	$effect(() => {
-		numbers = Array.from({ length: gridSize[0] * gridSize[1] });
+		cells = Array.from({ length: gridSize[0] * gridSize[1] });
 	});
 
 	function handleKeyUp({ key }) {
@@ -60,7 +60,7 @@
 	onpointerover={selectCell}
 >
 	<div class="inner">
-		{#each numbers as _, index}
+		{#each cells as _, index}
 			<DataCell {index} {cursor} selected={selected.has(index)} />
 		{/each}
 	</div>

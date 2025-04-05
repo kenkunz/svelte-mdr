@@ -1,5 +1,5 @@
 <script>
-	let { index } = $props();
+	let { index, selected } = $props();
 </script>
 
 <div class="bin">

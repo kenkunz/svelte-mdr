@@ -1,5 +1,5 @@
 // Data field size
-export const gridSize = [50, 50];
+export const gridSize = [20, 20];
 
 // Pan and zoom
 export const translatePx = 250;
