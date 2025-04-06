@@ -1,15 +1,20 @@
 <script module>
-	const bins = [1, 2, 3, 4, 5];
+	const indices = [1, 2, 3, 4, 5];
+
+	class BinInfo {
+		instances = $state({});
+		selected = $state();
+	}
+
+	export const binInfo = new BinInfo();
 </script>
 
 <script>
 	import Bin from './Bin.svelte';
 
-	let selectedBin = $state();
-
 	function handleKeyUp({ key }) {
-		if (bins.map(String).includes(key)) {
-			selectedBin = Number(key);
+		if (indices.map(String).includes(key)) {
+			binInfo.selected = Number(key);
 		}
 	}
 </script>
@@ -17,8 +22,8 @@
 <svelte:document onkeyup={handleKeyUp} />
 
 <section>
-	{#each bins as index}
-		<Bin {index} selected={index === selectedBin} />
+	{#each indices as index}
+		<Bin bind:this={binInfo.instances[index]} {index} selected={index === binInfo.selected} />
 	{/each}
 </section>
 
