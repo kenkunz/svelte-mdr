@@ -1,10 +1,16 @@
 <script>
+	import { fly } from 'svelte/transition';
 	import { cursorRadius, maxScale, selectedScale } from '$lib/settings';
 	import { randomInt } from '$lib/helpers';
+	import { selectedCells } from './DataField.svelte';
+	import { binInfo } from './Bins.svelte';
 
-	let { index, cursor, selected } = $props();
+	let { index, cursor } = $props();
 
 	let element;
+
+	let selected = $derived(selectedCells.has(index));
+
 	let scale = $derived.by(() => getScale(element, cursor));
 
 	const value = randomInt(0, 9);
@@ -34,17 +40,28 @@
 		// apply scaleRatio up to maxScale
 		return 1 + (maxScale - 1) * scaleRatio;
 	}
+
+	function handleOutroEnd() {
+		selectedCells.delete(index);
+		if (selectedCells.size === 0) {
+			binInfo.selected = undefined;
+		}
+	}
 </script>
 
 <div bind:this={element} class="data-cell" data-index={index}>
-	<div
-		class={['movement', axis]}
-		style:--range="{range}%"
-		style:--duration="{duration}ms"
-		style:--number-scale={scale}
-	>
-		<div class="scale">{value}</div>
-	</div>
+	{#if !(selected && binInfo.selected)}
+		<div
+			class={['movement', axis]}
+			style:--range="{range}%"
+			style:--duration="{duration}ms"
+			style:--number-scale={scale}
+			out:fly={{ y: 1000, opacity: 1, duration: 1000 }}
+			onoutroend={handleOutroEnd}
+		>
+			<div class="scale">{value}</div>
+		</div>
+	{/if}
 </div>
 
 <style>

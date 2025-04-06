@@ -1,3 +1,7 @@
+<script module>
+	export const selectedCells = new SvelteSet();
+</script>
+
 <script>
 	import { SvelteSet } from 'svelte/reactivity';
 	import { gridSize, translatePx, zoomRatio } from '$lib/settings';
@@ -10,8 +14,6 @@
 	let z = $state(1);
 
 	let cursor = $state({ x: 0, y: 0 });
-
-	let selected = new SvelteSet();
 
 	$effect(() => {
 		cells = Array.from({ length: gridSize[0] * gridSize[1] });
@@ -31,7 +33,7 @@
 			case '_' : return z /= zoomRatio;
 			case '0' : return z = 1;
 
-			case 'Escape' : return selected.clear();
+			case 'Escape' : return selectedCells.clear();
 		}
 	}
 
@@ -43,12 +45,12 @@
 	function selectCell({ target, buttons }) {
 		const { index } = target?.dataset ?? {};
 		if (buttons && index) {
-			selected.add(Number(index));
+			selectedCells.add(Number(index));
 		}
 	}
 </script>
 
-<svelte:document onkeyup={handleKeyUp} onpointerdowncapture={() => selected.clear()} />
+<svelte:document onkeyup={handleKeyUp} onpointerdowncapture={() => selectedCells.clear()} />
 
 <section
 	style:--cols={gridSize[0]}
@@ -61,7 +63,7 @@
 >
 	<div class="inner">
 		{#each cells as _, index}
-			<DataCell {index} {cursor} selected={selected.has(index)} />
+			<DataCell {index} {cursor} />
 		{/each}
 	</div>
 </section>
