@@ -1,7 +1,8 @@
 <script>
 	import { fly } from 'svelte/transition';
+	import { cubicOut } from 'svelte/easing';
 	import { cursorRadius, maxScale, selectedScale } from '$lib/settings';
-	import { randomInt } from '$lib/helpers';
+	import { randomInt, getNodeDistance } from '$lib/helpers';
 	import { selectedCells } from './DataField.svelte';
 	import { binInfo } from './Bins.svelte';
 
@@ -44,20 +45,29 @@
 	function handleOutroEnd() {
 		selectedCells.delete(index);
 		if (selectedCells.size === 0) {
-			binInfo.selected = undefined;
+			binInfo.selectedIndex = undefined;
 		}
+	}
+
+	function funnelToBin(node) {
+		const { dx, dy, distance } = getNodeDistance(node, binInfo.selectedBin);
+
+		return {
+			duration: distance * 1.5,
+			css: (t, u) => `translate: ${dx * cubicOut(u)}px ${dy * u}px`
+		};
 	}
 </script>
 
 <div bind:this={element} class="data-cell" data-index={index}>
-	{#if !(selected && binInfo.selected)}
+	{#if !(selected && binInfo.selectedBin)}
 		<div
 			class={['inner', axis]}
 			style:--range="{range}%"
 			style:--duration="{duration}ms"
 			style:--number-scale={scale}
-			out:fly={{ y: 250, opacity: 1, duration: 1000 }}
 			onoutroend={handleOutroEnd}
+			out:funnelToBin
 		>
 			{value}
 		</div>

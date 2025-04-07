@@ -3,7 +3,11 @@
 
 	class BinInfo {
 		instances = $state({});
-		selected = $state();
+		selectedIndex = $state();
+
+		get selectedBin() {
+			return this.instances[this.selectedIndex];
+		}
 	}
 
 	export const binInfo = new BinInfo();
@@ -14,7 +18,7 @@
 
 	function handleKeyUp({ key }) {
 		if (indices.map(String).includes(key)) {
-			binInfo.selected = Number(key);
+			binInfo.selectedIndex = Number(key);
 		}
 	}
 </script>
@@ -23,7 +27,7 @@
 
 <section>
 	{#each indices as index}
-		<Bin bind:this={binInfo.instances[index]} {index} selected={index === binInfo.selected} />
+		<Bin bind:this={binInfo.instances[index]} {index} selected={index === binInfo.selectedIndex} />
 	{/each}
 </section>
 

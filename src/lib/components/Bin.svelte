@@ -1,8 +1,14 @@
 <script>
 	let { index, selected } = $props();
+
+	let element;
+
+	export function getBoundingClientRect() {
+		return element?.getBoundingClientRect();
+	}
 </script>
 
-<div class="bin">
+<div bind:this={element} class="bin">
 	<div class="box">{String(index).padStart(2, 0)}</div>
 	<div class="progress">0%</div>
 </div>
