@@ -2,37 +2,26 @@
 	import { fly } from 'svelte/transition';
 	import { cubicOut } from 'svelte/easing';
 	import { cursorRadius, maxScale, selectedScale } from '$lib/settings';
-	import { randomInt, getNodeDistance } from '$lib/helpers';
+	import { randomInt, getNodeMidpoint, getDistance, getNodeDistance } from '$lib/helpers';
 	import { selectedCells } from './DataField.svelte';
 	import { binInfo } from './Bins.svelte';
 
 	let { index, cursor } = $props();
 
-	let element;
+	let element = $state();
 
 	let selected = $derived(selectedCells.has(index));
-
-	let scale = $derived.by(() => getScale(element, cursor));
 
 	const value = randomInt(0, 9);
 	const range = Math.random() * 15;
 	const duration = randomInt(1000, 5000);
 	const axis = randomInt(0, 1) ? 'x' : 'y';
 
-	function getScale(el, { x, y }) {
-		if (!el) return 1;
-
+	let scale = $derived.by(() => {
+		if (!element) return 1;
 		if (selected) return selectedScale;
 
-		const rect = el.getBoundingClientRect();
-
-		const centerX = rect.left + rect.width / 2;
-		const centerY = rect.top + rect.height / 2;
-
-		const dx = centerX - x;
-		const dy = centerY - y;
-		const distance = Math.sqrt(dx * dx + dy * dy);
-
+		const { distance } = getDistance(cursor, getNodeMidpoint(element));
 		if (distance > cursorRadius) return 1;
 
 		// calculate ratio to scale by (between 0 and 1)
@@ -40,7 +29,7 @@
 
 		// apply scaleRatio up to maxScale
 		return 1 + (maxScale - 1) * scaleRatio;
-	}
+	});
 
 	function handleOutroEnd() {
 		selectedCells.delete(index);

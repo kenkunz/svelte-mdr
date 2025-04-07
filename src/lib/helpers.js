@@ -9,17 +9,17 @@ export function getRectMidpoint({ left, top, width, height }) {
 	};
 }
 
-export function getNodeDistance(node1, node2) {
-	const rect1 = node1.getBoundingClientRect();
-	const mid1 = getRectMidpoint(rect1);
+export function getNodeMidpoint(node) {
+	return getRectMidpoint(node.getBoundingClientRect());
+}
 
-	const rect2 = node2.getBoundingClientRect();
-	const mid2 = getRectMidpoint(rect2);
-
-	const dx = mid2.x - mid1.x;
-	const dy = mid2.y - mid1.y;
-
+export function getDistance(point1, point2) {
+	const dx = point2.x - point1.x;
+	const dy = point2.y - point1.y;
 	const distance = Math.sqrt(dx * dx + dy * dy);
-
 	return { dx, dy, distance };
+}
+
+export function getNodeDistance(node1, node2) {
+	return getDistance(getNodeMidpoint(node1), getNodeMidpoint(node2));
 }
