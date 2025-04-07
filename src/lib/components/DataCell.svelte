@@ -52,14 +52,14 @@
 <div bind:this={element} class="data-cell" data-index={index}>
 	{#if !(selected && binInfo.selected)}
 		<div
-			class={['movement', axis]}
+			class={['inner', axis]}
 			style:--range="{range}%"
 			style:--duration="{duration}ms"
 			style:--number-scale={scale}
-			out:fly={{ y: 1000, opacity: 1, duration: 1000 }}
+			out:fly={{ y: 250, opacity: 1, duration: 1000 }}
 			onoutroend={handleOutroEnd}
 		>
-			<div class="scale">{value}</div>
+			{value}
 		</div>
 	{/if}
 </div>
@@ -75,43 +75,32 @@
 		pointer-events: auto;
 	}
 
-	.movement {
-		pointer-events: none;
-		animation: var(--duration) infinite alternate linear;
-		--range-neg: calc(-1 * var(--range));
-
-		&.x {
-			animation-name: x-axis;
-		}
-
-		&.y {
-			animation-name: y-axis;
-		}
-	}
-
-	.scale {
+	.inner {
 		place-content: center;
 		font-size: 1.25rem;
 		font-weight: 300;
-		transform: scale(var(--number-scale));
-		transition: transform 0.5s ease-out;
+		pointer-events: none;
+		scale: var(--number-scale);
+		transition: scale 0.5s ease-out;
+		animation: var(--duration) infinite wiggle alternate linear;
+
+		&.x {
+			--translate-from: calc(-1 * var(--range));
+			--translate-to: var(--range);
+		}
+
+		&.y {
+			--translate-from: 0 calc(-1 * var(--range));
+			--translate-to: 0 var(--range);
+		}
 	}
 
-	@keyframes x-axis {
+	@keyframes wiggle {
 		from {
-			transform: translateX(var(--range-neg));
+			translate: var(--translate-from);
 		}
 		to {
-			transform: translateX(var(--range));
-		}
-	}
-
-	@keyframes y-axis {
-		from {
-			transform: translateY(var(--range-neg));
-		}
-		to {
-			transform: translateY(var(--range));
+			translate: var(--translate-to);
 		}
 	}
 </style>
