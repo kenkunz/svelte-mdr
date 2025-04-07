@@ -1,5 +1,5 @@
 <script>
-	import { fly } from 'svelte/transition';
+	import { fade } from 'svelte/transition';
 	import { cubicOut } from 'svelte/easing';
 	import { cursorRadius, maxScale, selectedScale } from '$lib/settings';
 	import {
@@ -16,12 +16,11 @@
 
 	let element = $state();
 
+	let cellInfo = $state();
+
 	let selected = $derived(selectedCells.has(index));
 
-	const value = randomInt(0, 9);
-	const range = Math.random() * 15;
-	const duration = randomInt(1000, 5000);
-	const axis = randomInt(0, 1) ? 'x' : 'y';
+	let binning = $derived(Boolean(selectedCells.size && binInfo.selectedIndex));
 
 	let scale = $derived.by(() => {
 		if (!element) return 1;
@@ -37,8 +36,25 @@
 		return 1 + (maxScale - 1) * scaleRatio;
 	});
 
+	// initialize empty cell values (on initial load or after binning completes)
+	$effect(() => {
+		if (!binning && !cellInfo) setCellInfo();
+	});
+
+	function setCellInfo() {
+		setTimeout(() => {
+			cellInfo = {
+				value: randomInt(0, 9),
+				range: Math.random() * 15,
+				duration: randomInt(1000, 5000),
+				axis: randomInt(0, 1) ? 'x' : 'y'
+			};
+		});
+	}
+
 	function handleOutroEnd() {
 		selectedCells.delete(index);
+		cellInfo = undefined;
 		if (selectedCells.size === 0) {
 			binInfo.selectedIndex = undefined;
 		}
@@ -57,13 +73,15 @@
 </script>
 
 <div bind:this={element} class="data-cell" data-index={index}>
-	{#if !(selected && binInfo.selectedBin)}
+	{#if cellInfo && !(selected && binInfo.selectedBin)}
+		{@const { value, axis, range, duration } = cellInfo}
 		<div
 			class={['inner', axis]}
 			style:--range="{range}%"
 			style:--duration="{duration}ms"
 			style:--number-scale={scale}
 			onoutroend={handleOutroEnd}
+			in:fade={{ duration: duration / 2 }}
 			out:funnelToBin
 		>
 			{value}
