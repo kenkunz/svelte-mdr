@@ -16,10 +16,18 @@ export function getNodeMidpoint(node) {
 export function getDistance(point1, point2) {
 	const dx = point2.x - point1.x;
 	const dy = point2.y - point1.y;
-	const distance = Math.sqrt(dx * dx + dy * dy);
-	return { dx, dy, distance };
+	const magnitude = Math.sqrt(dx * dx + dy * dy);
+	return { dx, dy, magnitude };
 }
 
 export function getNodeDistance(node1, node2) {
 	return getDistance(getNodeMidpoint(node1), getNodeMidpoint(node2));
+}
+
+export function scaleDistance({ dx, dy, magnitude }, scale) {
+	return {
+		dx: dx / scale,
+		dy: dy / scale,
+		magnitude: magnitude / scale
+	};
 }

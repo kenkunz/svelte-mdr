@@ -2,11 +2,17 @@
 	import { fly } from 'svelte/transition';
 	import { cubicOut } from 'svelte/easing';
 	import { cursorRadius, maxScale, selectedScale } from '$lib/settings';
-	import { randomInt, getNodeMidpoint, getDistance, getNodeDistance } from '$lib/helpers';
+	import {
+		randomInt,
+		getNodeMidpoint,
+		getDistance,
+		getNodeDistance,
+		scaleDistance
+	} from '$lib/helpers';
 	import { selectedCells } from './DataField.svelte';
 	import { binInfo } from './Bins.svelte';
 
-	let { index, cursor } = $props();
+	let { index, cursor, gridScale } = $props();
 
 	let element = $state();
 
@@ -21,11 +27,11 @@
 		if (!element) return 1;
 		if (selected) return selectedScale;
 
-		const { distance } = getDistance(cursor, getNodeMidpoint(element));
-		if (distance > cursorRadius) return 1;
+		const { magnitude } = getDistance(cursor, getNodeMidpoint(element));
+		if (magnitude > cursorRadius) return 1;
 
 		// calculate ratio to scale by (between 0 and 1)
-		const scaleRatio = (cursorRadius - distance) / cursorRadius;
+		const scaleRatio = (cursorRadius - magnitude) / cursorRadius;
 
 		// apply scaleRatio up to maxScale
 		return 1 + (maxScale - 1) * scaleRatio;
@@ -39,10 +45,12 @@
 	}
 
 	function funnelToBin(node) {
-		const { dx, dy, distance } = getNodeDistance(node, binInfo.selectedBin);
+		const distance = getNodeDistance(node, binInfo.selectedBin);
+
+		const { dx, dy, magnitude } = scaleDistance(distance, gridScale);
 
 		return {
-			duration: distance * 1.5,
+			duration: magnitude * 1.5,
 			css: (t, u) => `translate: ${dx * cubicOut(u)}px ${dy * u}px`
 		};
 	}

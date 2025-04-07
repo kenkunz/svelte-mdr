@@ -11,7 +11,8 @@
 
 	let x = $state(0);
 	let y = $state(0);
-	let z = $state(1);
+
+	let scale = $state(1);
 
 	let cursor = $state({ x: 0, y: 0 });
 
@@ -27,11 +28,11 @@
 			case 'ArrowUp'    : return y += translatePx;
 			case 'ArrowDown'  : return y -= translatePx;
 
-			case '=' : return z *= zoomRatio;
-			case '+' : return z *= zoomRatio;
-			case '-' : return z /= zoomRatio;
-			case '_' : return z /= zoomRatio;
-			case '0' : return z = 1;
+			case '=' : return scale *= zoomRatio;
+			case '+' : return scale *= zoomRatio;
+			case '-' : return scale /= zoomRatio;
+			case '_' : return scale /= zoomRatio;
+			case '0' : return scale = 1;
 
 			case 'Escape' : return selectedCells.clear();
 		}
@@ -56,14 +57,14 @@
 	style:--cols={gridSize[0]}
 	style:--x="{x}px"
 	style:--y="{y}px"
-	style:--scale={z}
+	style:--scale={scale}
 	onpointermove={handlePointerMove}
 	onpointerdown={selectCell}
 	onpointerover={selectCell}
 >
 	<div class="inner">
 		{#each cells as _, index}
-			<DataCell {index} {cursor} />
+			<DataCell {index} {cursor} gridScale={scale} />
 		{/each}
 	</div>
 </section>
