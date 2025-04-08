@@ -7,6 +7,10 @@ settings:
 importers:
 
   .:
+    dependencies:
+      runed:
+        specifier: ^0.25.0
+        version: 0.25.0(svelte@5.20.1)
     devDependencies:
       '@eslint/compat':
         specifier: ^1.2.6
@@ -832,6 +836,11 @@ packages:
     engines: {node: '>=18.0.0', npm: '>=8.0.0'}
     hasBin: true
 
+  runed@0.25.0:
+    resolution: {integrity: sha512-7+ma4AG9FT2sWQEA0Egf6mb7PBT2vHyuHail1ie8ropfSjvZGtEAx8YTmUjv/APCsdRRxEVvArNjALk9zFSOrg==}
+    peerDependencies:
+      svelte: ^5.7.0
+
   sade@1.8.1:
     resolution: {integrity: sha512-xal3CZX1Xlo/k4ApwCFrHVACi9fBqJ7V+mwhBsuf/1IOKbBy098Fex+Wa/5QMubw09pSZ/u8EY8PWgevJsXp1A==}
     engines: {node: '>=6'}
@@ -1645,6 +1654,11 @@ snapshots:
       '@rollup/rollup-win32-ia32-msvc': 4.34.7
       '@rollup/rollup-win32-x64-msvc': 4.34.7
       fsevents: 2.3.3
+
+  runed@0.25.0(svelte@5.20.1):
+    dependencies:
+      esm-env: 1.2.2
+      svelte: 5.20.1
 
   sade@1.8.1:
     dependencies:
