@@ -1,6 +1,10 @@
 <script module>
 	const indices = [1, 2, 3, 4, 5];
 
+	export function isBinKey(key) {
+		return indices.map(String).includes(key);
+	}
+
 	class BinInfo {
 		instances = $state({});
 		selectedIndex = $state();
@@ -14,12 +18,11 @@
 </script>
 
 <script>
+	import { refinery } from '$lib/refinery.svelte';
 	import Bin from './Bin.svelte';
 
 	function handleKeyUp({ key }) {
-		if (indices.map(String).includes(key)) {
-			binInfo.selectedIndex = Number(key);
-		}
+		if (isBinKey(key)) refinery.send('selectBin', Number(key));
 	}
 </script>
 

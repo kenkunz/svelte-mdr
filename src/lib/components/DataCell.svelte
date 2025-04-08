@@ -9,18 +9,16 @@
 		getNodeDistance,
 		scaleDistance
 	} from '$lib/helpers';
-	import { selectedCells } from './DataField.svelte';
+	import { refinery } from '$lib/refinery.svelte';
 	import { binInfo } from './Bins.svelte';
 
-	let { index, cursor, gridScale } = $props();
+	let { index, cursor, selected, gridScale } = $props();
 
 	let element = $state();
 
 	let cellInfo = $state();
 
-	let selected = $derived(selectedCells.has(index));
-
-	let binning = $derived(Boolean(selectedCells.size && binInfo.selectedIndex));
+	let sendingToBin = $derived(selected && refinery.current === 'fillingBin');
 
 	let scale = $derived.by(() => {
 		if (!element) return 1;
@@ -38,7 +36,7 @@
 
 	// initialize empty cell values (on initial load or after binning completes)
 	$effect(() => {
-		if (!binning && !cellInfo) setCellInfo();
+		if (refinery.current === 'ready' && !cellInfo) setCellInfo();
 	});
 
 	function setCellInfo() {
@@ -53,11 +51,8 @@
 	}
 
 	function handleOutroEnd() {
-		selectedCells.delete(index);
+		refinery.send('done', index);
 		cellInfo = undefined;
-		if (selectedCells.size === 0) {
-			binInfo.selectedIndex = undefined;
-		}
 	}
 
 	function funnelToBin(node) {
@@ -73,7 +68,7 @@
 </script>
 
 <div bind:this={element} class="data-cell" data-index={index}>
-	{#if cellInfo && !(selected && binInfo.selectedBin)}
+	{#if cellInfo && !sendingToBin}
 		{@const { value, axis, range, duration } = cellInfo}
 		<div
 			class={['inner', axis]}

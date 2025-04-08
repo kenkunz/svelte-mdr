@@ -6,6 +6,7 @@
 	import { SvelteSet } from 'svelte/reactivity';
 	import { gridSize, translatePx, zoomRatio } from '$lib/settings';
 	import DataCell from './DataCell.svelte';
+	import { refinery } from '$lib/refinery.svelte';
 
 	let cells = $state([]);
 
@@ -42,13 +43,6 @@
 		cursor.x = event.clientX;
 		cursor.y = event.clientY;
 	}
-
-	function selectCell({ target, buttons }) {
-		const { index } = target?.dataset ?? {};
-		if (buttons && index) {
-			selectedCells.add(Number(index));
-		}
-	}
 </script>
 
 <svelte:document onkeyup={handleKeyUp} onpointerdowncapture={() => selectedCells.clear()} />
@@ -59,12 +53,12 @@
 	style:--y="{y}px"
 	style:--scale={scale}
 	onpointermove={handlePointerMove}
-	onpointerdown={selectCell}
-	onpointerover={selectCell}
+	onpointerdown={(e) => refinery.send('selectCell', e)}
+	onpointerover={(e) => refinery.send('selectCell', e)}
 >
 	<div class="inner">
 		{#each cells as _, index}
-			<DataCell {index} {cursor} gridScale={scale} />
+			<DataCell {index} {cursor} selected={selectedCells.has(index)} gridScale={scale} />
 		{/each}
 	</div>
 </section>
