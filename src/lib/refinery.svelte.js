@@ -34,6 +34,9 @@ export const refinery = new FiniteStateMachine('ready', {
 
 		addToBin(index) {
 			selectedCells.delete(index);
+
+			binInfo.selectedBin.addItem();
+
 			if (selectedCells.size === 0) {
 				refinery.debounce(250, 'done');
 			}

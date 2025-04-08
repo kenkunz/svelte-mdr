@@ -5,10 +5,15 @@
 
 	const height = 14;
 	const duration = 500;
+	const maxItems = 50;
 
 	let { index, selected } = $props();
 
 	let element;
+
+	let items = $state(0);
+
+	let percentFull = $derived(items / maxItems);
 
 	let open = $derived(selected && ['openingBin', 'fillingBin'].includes(refinery.current));
 
@@ -16,6 +21,10 @@
 
 	export function getBoundingClientRect() {
 		return element?.getBoundingClientRect();
+	}
+
+	export function addItem() {
+		items = Math.min(maxItems, items + 1);
 	}
 </script>
 
@@ -32,7 +41,10 @@
 			<BoxLid {height} {width} {duration} side="right" />
 		{/if}
 	</div>
-	<div class="progress">0%</div>
+	<div class="progress">
+		<div class="bar" style:width="{percentFull * 100}%"></div>
+		<div class="value">{percentFull.toLocaleString('en-us', { style: 'percent' })}</div>
+	</div>
 </div>
 
 <style>
@@ -45,7 +57,7 @@
 		grid-template-rows: 5fr 4fr;
 		gap: var(--space);
 		padding-block: var(--space);
-		font-size: 2rem;
+		font-size: 1.8rem;
 	}
 
 	.box {
@@ -74,7 +86,23 @@
 	.progress {
 		border: var(--border);
 		display: grid;
-		align-content: center;
-		padding-inline: 0.25rem;
+		align-items: center;
+
+		> * {
+			grid-area: 1 / -1;
+		}
+
+		.bar {
+			height: 100%;
+			background: currentColor;
+			transition: width 0.1s ease-out;
+		}
+
+		.value {
+			padding-left: 0.5rem;
+			font-weight: 300;
+			letter-spacing: 0.05em;
+			mix-blend-mode: difference;
+		}
 	}
 </style>
