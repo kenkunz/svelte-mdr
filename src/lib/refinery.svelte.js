@@ -18,10 +18,6 @@ export const refinery = new FiniteStateMachine('ready', {
 	},
 
 	openingBin: {
-		_enter() {
-			refinery.debounce(1000, 'done');
-		},
-
 		done: 'fillingBin'
 	},
 

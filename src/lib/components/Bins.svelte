@@ -41,6 +41,7 @@
 		display: flex;
 		gap: max(2.5%, 1rem);
 		justify-content: center;
-		overflow: hidden;
+		overflow: visible;
+		contain: size layout;
 	}
 </style>
