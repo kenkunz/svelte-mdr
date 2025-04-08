@@ -5,8 +5,10 @@
 }
 
 body {
+	--body-bg: hsl(212 50% 12%);
+
 	margin: 0;
-	background-color: hsl(212 50% 12%);
+	background: var(--body-bg);
 	color: hsl(195, 50%, 65%);
 }
 

@@ -1,6 +1,10 @@
 <script>
 	import { fly } from 'svelte/transition';
 	import { refinery } from '$lib/refinery.svelte';
+	import BoxLid from './BoxLid.svelte';
+
+	const height = 14;
+	const duration = 500;
 
 	let { index, selected } = $props();
 
@@ -8,23 +12,24 @@
 
 	let open = $derived(selected && ['openingBin', 'fillingBin'].includes(refinery.current));
 
-	const height = 14;
-	const duration = 500;
+	let width = $state();
 
 	export function getBoundingClientRect() {
 		return element?.getBoundingClientRect();
 	}
 </script>
 
-<div bind:this={element} class="bin">
-	<div class="box" style:--height="{height}px">
+<div bind:this={element} class="bin" style:--height="{height}px" bind:offsetWidth={width}>
+	<div class="box">
 		<div class="front">{String(index).padStart(2, 0)}</div>
 		{#if open}
 			<div
-				class="top"
+				class="rear-lid"
 				onintroend={() => refinery.send('done')}
 				transition:fly={{ duration, opacity: 1, y: height }}
 			></div>
+			<BoxLid {height} {width} {duration} side="left" />
+			<BoxLid {height} {width} {duration} side="right" />
 		{/if}
 	</div>
 	<div class="progress">0%</div>
@@ -60,7 +65,7 @@
 		place-content: center;
 	}
 
-	.top {
+	.rear-lid {
 		border-top: var(--border);
 		width: 100%;
 		top: calc(-1 * var(--height) + 1px);
