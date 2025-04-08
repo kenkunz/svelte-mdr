@@ -22,19 +22,21 @@ export const refinery = new FiniteStateMachine('ready', {
 	},
 
 	fillingBin: {
+		_enter() {
+			if (selectedCells.size === 0) {
+				refinery.debounce(500, 'done');
+			}
+		},
+
 		_exit() {
 			binInfo.selectedIndex = undefined;
 		},
 
-		done(index) {
+		addToBin(index) {
 			selectedCells.delete(index);
-			if (selectedCells.size === 0) return 'closingBin';
-		}
-	},
-
-	closingBin: {
-		_enter() {
-			refinery.debounce(1000, 'done');
+			if (selectedCells.size === 0) {
+				refinery.debounce(250, 'done');
+			}
 		},
 
 		done: 'ready'

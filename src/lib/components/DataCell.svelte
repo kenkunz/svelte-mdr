@@ -51,7 +51,7 @@
 	}
 
 	function handleOutroEnd() {
-		refinery.send('done', index);
+		refinery.send('addToBin', index);
 		cellInfo = undefined;
 	}
 
