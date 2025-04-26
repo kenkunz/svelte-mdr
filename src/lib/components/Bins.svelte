@@ -1,39 +1,23 @@
-<script module lang="ts">
+<script lang="ts">
+	import { refinery, binManager } from '$lib/refinery.svelte';
 	import Bin from './Bin.svelte';
 
-	const indices = [1, 2, 3, 4, 5];
-
-	export function isBinKey(key: string) {
-		return indices.map(String).includes(key);
-	}
-
-	class BinInfo {
-		instances: Record<(typeof indices)[number], Bin> = $state({});
-		selectedIndex: number | undefined = $state();
-
-		get selectedBin() {
-			if (this.selectedIndex !== undefined) {
-				return this.instances[this.selectedIndex];
-			}
-		}
-	}
-
-	export const binInfo = new BinInfo();
-</script>
-
-<script lang="ts">
-	import { refinery } from '$lib/refinery.svelte';
-
 	function handleKeyUp({ key }: KeyboardEvent) {
-		if (isBinKey(key)) refinery.send('selectBin', Number(key));
+		if (binManager.isBinIndex(key)) {
+			refinery.send('selectBin', key);
+		}
 	}
 </script>
 
 <svelte:document onkeyup={handleKeyUp} />
 
 <section>
-	{#each indices as index}
-		<Bin bind:this={binInfo.instances[index]} {index} selected={index === binInfo.selectedIndex} />
+	{#each binManager.indices as index}
+		<Bin
+			bind:this={binManager.instances[index]}
+			{index}
+			selected={index === binManager.selectedIndex}
+		/>
 	{/each}
 </section>
 

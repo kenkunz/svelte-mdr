@@ -1,8 +1,10 @@
 import { SvelteSet } from 'svelte/reactivity';
 import { FiniteStateMachine } from 'runed';
-import { binInfo } from './components/Bins.svelte';
+import { BinManager } from './bin-manager.svelte';
 
 export const selectedCells = new SvelteSet<number>();
+
+export const binManager = new BinManager();
 
 export const refinery = new FiniteStateMachine('ready', {
 	ready: {
@@ -19,8 +21,7 @@ export const refinery = new FiniteStateMachine('ready', {
 		},
 
 		selectBin(binIndex) {
-			if (typeof binIndex !== 'number') return;
-			binInfo.selectedIndex = binIndex;
+			binManager.selectBin(binIndex);
 			return 'openingBin';
 		}
 	},
@@ -37,7 +38,7 @@ export const refinery = new FiniteStateMachine('ready', {
 		},
 
 		_exit() {
-			binInfo.selectedIndex = undefined;
+			binManager.selectedIndex = undefined;
 		},
 
 		addToBin(index) {
@@ -45,7 +46,7 @@ export const refinery = new FiniteStateMachine('ready', {
 
 			selectedCells.delete(index);
 
-			binInfo.selectedBin?.addItem();
+			binManager.selectedBin?.addItem();
 
 			if (selectedCells.size === 0) {
 				refinery.debounce(250, 'done');

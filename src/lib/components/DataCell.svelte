@@ -10,8 +10,7 @@
 		getNodeDistance,
 		scaleDistance
 	} from '$lib/helpers';
-	import { refinery } from '$lib/refinery.svelte';
-	import { binInfo } from './Bins.svelte';
+	import { refinery, binManager } from '$lib/refinery.svelte';
 
 	interface CellInfo {
 		value: number;
@@ -71,9 +70,9 @@
 	}
 
 	function funnelToBin(node: HTMLElement): TransitionConfig {
-		if (!binInfo.selectedBin) return {};
+		if (!binManager.selectedBin) return {};
 
-		const distance = getNodeDistance(node, binInfo.selectedBin);
+		const distance = getNodeDistance(node, binManager.selectedBin);
 		const { dx, dy, magnitude } = scaleDistance(distance, gridScale);
 
 		return {
