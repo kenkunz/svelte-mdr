@@ -1,5 +1,5 @@
 <script lang="ts">
-	let coords = $state([]);
+	let coords: string[] = $state([]);
 
 	function getHexString() {
 		return Math.random().toString(16).slice(2, 8).padEnd(6, '0');

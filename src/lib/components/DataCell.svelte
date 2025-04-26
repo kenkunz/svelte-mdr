@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { fade } from 'svelte/transition';
+	import type { Coordinate } from '$lib/helpers';
+	import { type TransitionConfig, fade } from 'svelte/transition';
 	import { cubicOut } from 'svelte/easing';
 	import { cursorRadius, maxScale, selectedScale } from '$lib/settings';
 	import {
@@ -12,11 +13,25 @@
 	import { refinery } from '$lib/refinery.svelte';
 	import { binInfo } from './Bins.svelte';
 
+	interface CellInfo {
+		value: number;
+		range: number;
+		duration: number;
+		axis: 'x' | 'y';
+	}
+
+	interface Props {
+		index: number;
+		cursor: Coordinate;
+		selected: boolean;
+		gridScale: number;
+	}
+
 	let { index, cursor, selected, gridScale } = $props();
 
-	let element = $state();
+	let element: HTMLDivElement | undefined = $state();
 
-	let cellInfo = $state();
+	let cellInfo: CellInfo | undefined = $state();
 
 	let sendingToBin = $derived(selected && refinery.current === 'fillingBin');
 
@@ -55,14 +70,15 @@
 		cellInfo = undefined;
 	}
 
-	function funnelToBin(node) {
-		const distance = getNodeDistance(node, binInfo.selectedBin);
+	function funnelToBin(node: HTMLElement): TransitionConfig {
+		if (!binInfo.selectedBin) return {};
 
+		const distance = getNodeDistance(node, binInfo.selectedBin);
 		const { dx, dy, magnitude } = scaleDistance(distance, gridScale);
 
 		return {
 			duration: magnitude * 1.5,
-			css: (t, u) => `translate: ${dx * cubicOut(u)}px ${dy * u}px`
+			css: (_, u) => `translate: ${dx * cubicOut(u)}px ${dy * u}px`
 		};
 	}
 </script>

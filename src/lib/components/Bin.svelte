@@ -7,9 +7,14 @@
 	const duration = 500;
 	const maxItems = 50;
 
-	let { index, selected } = $props();
+	interface Props {
+		index: number;
+		selected: boolean;
+	}
 
-	let element;
+	let { index, selected }: Props = $props();
+
+	let element: HTMLElement;
 
 	let items = $state(0);
 
@@ -17,10 +22,10 @@
 
 	let open = $derived(selected && ['openingBin', 'fillingBin'].includes(refinery.current));
 
-	let width = $state();
+	let width = $state() as number;
 
 	export function getBoundingClientRect() {
-		return element?.getBoundingClientRect();
+		return element.getBoundingClientRect();
 	}
 
 	export function addItem() {
@@ -30,7 +35,7 @@
 
 <div bind:this={element} class="bin" style:--height="{height}px" bind:offsetWidth={width}>
 	<div class="box">
-		<div class="front">{String(index).padStart(2, 0)}</div>
+		<div class="front">{String(index).padStart(2, '0')}</div>
 		{#if open}
 			<div
 				class="rear-lid"

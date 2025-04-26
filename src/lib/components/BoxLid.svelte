@@ -1,11 +1,20 @@
 <script lang="ts">
+	import type { TransitionConfig } from 'svelte/transition';
+
 	const maxAngle = Math.PI * 0.75;
 
-	let { width, height, side, duration } = $props();
+	interface Props {
+		width: number;
+		height: number;
+		duration: number;
+		side: 'left' | 'right';
+	}
+
+	let { width, height, duration, side }: Props = $props();
 
 	let radius = $derived(width / 2);
 
-	function pivot(node, { duration = 500 }) {
+	function pivot(node: SVGPathElement, { duration = 500 }): TransitionConfig {
 		return {
 			duration,
 			tick: (t, u) => {

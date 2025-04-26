@@ -1,16 +1,20 @@
 <script module lang="ts">
+	import Bin from './Bin.svelte';
+
 	const indices = [1, 2, 3, 4, 5];
 
-	export function isBinKey(key) {
+	export function isBinKey(key: string) {
 		return indices.map(String).includes(key);
 	}
 
 	class BinInfo {
-		instances = $state({});
-		selectedIndex = $state();
+		instances: Record<(typeof indices)[number], Bin> = $state({});
+		selectedIndex: number | undefined = $state();
 
 		get selectedBin() {
-			return this.instances[this.selectedIndex];
+			if (this.selectedIndex !== undefined) {
+				return this.instances[this.selectedIndex];
+			}
 		}
 	}
 
@@ -19,9 +23,8 @@
 
 <script lang="ts">
 	import { refinery } from '$lib/refinery.svelte';
-	import Bin from './Bin.svelte';
 
-	function handleKeyUp({ key }) {
+	function handleKeyUp({ key }: KeyboardEvent) {
 		if (isBinKey(key)) refinery.send('selectBin', Number(key));
 	}
 </script>

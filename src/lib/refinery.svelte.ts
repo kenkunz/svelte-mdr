@@ -4,14 +4,16 @@ import { binInfo } from './components/Bins.svelte';
 
 export const refinery = new FiniteStateMachine('ready', {
 	ready: {
-		selectCell({ target, buttons }) {
-			const { index } = target?.dataset ?? {};
-			if (buttons && index) {
+		selectCell(event) {
+			if (!(event instanceof PointerEvent && event.target instanceof HTMLElement)) return;
+			const { index } = event.target.dataset;
+			if (event.buttons && index) {
 				selectedCells.add(Number(index));
 			}
 		},
 
 		selectBin(binIndex) {
+			if (typeof binIndex !== 'number') return;
 			binInfo.selectedIndex = binIndex;
 			return 'openingBin';
 		}
@@ -33,9 +35,11 @@ export const refinery = new FiniteStateMachine('ready', {
 		},
 
 		addToBin(index) {
+			if (typeof index !== 'number') return;
+
 			selectedCells.delete(index);
 
-			binInfo.selectedBin.addItem();
+			binInfo.selectedBin?.addItem();
 
 			if (selectedCells.size === 0) {
 				refinery.debounce(250, 'done');

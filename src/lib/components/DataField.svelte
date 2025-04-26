@@ -1,8 +1,9 @@
 <script module lang="ts">
-	export const selectedCells = new SvelteSet();
+	export const selectedCells = new SvelteSet<number>();
 </script>
 
 <script lang="ts">
+	import type { Coordinate } from '$lib/helpers';
 	import { SvelteSet } from 'svelte/reactivity';
 	import { gridSize, translatePx, zoomRatio } from '$lib/settings';
 	import DataCell from './DataCell.svelte';
@@ -15,13 +16,13 @@
 
 	let scale = $state(1);
 
-	let cursor = $state({ x: 0, y: 0 });
+	let cursor: Coordinate = $state({ x: 0, y: 0 });
 
 	$effect(() => {
 		cells = Array.from({ length: gridSize[0] * gridSize[1] });
 	});
 
-	function handleKeyUp({ key }) {
+	function handleKeyUp({ key }: KeyboardEvent) {
 		// prettier-ignore
 		switch (key) {
 			case 'ArrowRight' : return x -= translatePx;
@@ -39,7 +40,7 @@
 		}
 	}
 
-	function handlePointerMove(event) {
+	function handlePointerMove(event: PointerEvent) {
 		cursor.x = event.clientX;
 		cursor.y = event.clientY;
 	}
