@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import LumonLogo from '$lib/assets/lumon-logo.svg?raw';
 </script>
 

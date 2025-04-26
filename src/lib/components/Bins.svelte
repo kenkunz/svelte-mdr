@@ -1,4 +1,4 @@
-<script module>
+<script module lang="ts">
 	const indices = [1, 2, 3, 4, 5];
 
 	export function isBinKey(key) {
@@ -17,7 +17,7 @@
 	export const binInfo = new BinInfo();
 </script>
 
-<script>
+<script lang="ts">
 	import { refinery } from '$lib/refinery.svelte';
 	import Bin from './Bin.svelte';
 

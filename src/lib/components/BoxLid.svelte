@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	const maxAngle = Math.PI * 0.75;
 
 	let { width, height, side, duration } = $props();

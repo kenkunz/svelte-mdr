@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import Header from '$lib/components/Header.svelte';
 	import DataField from '$lib/components/DataField.svelte';
 	import Bins from '$lib/components/Bins.svelte';

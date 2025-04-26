@@ -1,8 +1,8 @@
-<script module>
+<script module lang="ts">
 	export const selectedCells = new SvelteSet();
 </script>
 
-<script>
+<script lang="ts">
 	import { SvelteSet } from 'svelte/reactivity';
 	import { gridSize, translatePx, zoomRatio } from '$lib/settings';
 	import DataCell from './DataCell.svelte';

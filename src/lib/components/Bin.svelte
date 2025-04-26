@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { fly } from 'svelte/transition';
 	import { refinery } from '$lib/refinery.svelte';
 	import BoxLid from './BoxLid.svelte';
