@@ -1,13 +1,8 @@
-<script module lang="ts">
-	export const selectedCells = new SvelteSet<number>();
-</script>
-
 <script lang="ts">
 	import type { Coordinate } from '$lib/helpers';
-	import { SvelteSet } from 'svelte/reactivity';
 	import { gridSize, translatePx, zoomRatio } from '$lib/settings';
 	import DataCell from './DataCell.svelte';
-	import { refinery } from '$lib/refinery.svelte';
+	import { refinery, selectedCells } from '$lib/refinery.svelte';
 
 	let cells = $state([]);
 
@@ -36,7 +31,7 @@
 			case '_' : return scale /= zoomRatio;
 			case '0' : return scale = 1;
 
-			case 'Escape' : return selectedCells.clear();
+			case 'Escape' : return refinery.send('clearCells')
 		}
 	}
 

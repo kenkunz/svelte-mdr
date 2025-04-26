@@ -1,6 +1,8 @@
+import { SvelteSet } from 'svelte/reactivity';
 import { FiniteStateMachine } from 'runed';
-import { selectedCells } from './components/DataField.svelte';
 import { binInfo } from './components/Bins.svelte';
+
+export const selectedCells = new SvelteSet<number>();
 
 export const refinery = new FiniteStateMachine('ready', {
 	ready: {
@@ -10,6 +12,10 @@ export const refinery = new FiniteStateMachine('ready', {
 			if (event.buttons && index) {
 				selectedCells.add(Number(index));
 			}
+		},
+
+		clearCells() {
+			selectedCells.clear();
 		},
 
 		selectBin(binIndex) {
