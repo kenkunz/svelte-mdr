@@ -1,15 +1,10 @@
 <script lang="ts">
 	import type { Coordinate } from '$lib/helpers';
 	import { gridSize, translatePx, zoomRatio } from '$lib/settings';
+	import { refinery, viewport, selectedCells } from '$lib/refinery.svelte';
 	import DataCell from './DataCell.svelte';
-	import { refinery, selectedCells } from '$lib/refinery.svelte';
 
 	let cells = $state([]);
-
-	let x = $state(0);
-	let y = $state(0);
-
-	let scale = $state(1);
 
 	let cursor: Coordinate = $state({ x: 0, y: 0 });
 
@@ -20,16 +15,16 @@
 	function handleKeyUp({ key }: KeyboardEvent) {
 		// prettier-ignore
 		switch (key) {
-			case 'ArrowRight' : return x -= translatePx;
-			case 'ArrowLeft'  : return x += translatePx;
-			case 'ArrowUp'    : return y += translatePx;
-			case 'ArrowDown'  : return y -= translatePx;
+			case 'ArrowRight' : return viewport.x -= translatePx;
+			case 'ArrowLeft'  : return viewport.x += translatePx;
+			case 'ArrowUp'    : return viewport.y += translatePx;
+			case 'ArrowDown'  : return viewport.y -= translatePx;
 
-			case '=' : return scale *= zoomRatio;
-			case '+' : return scale *= zoomRatio;
-			case '-' : return scale /= zoomRatio;
-			case '_' : return scale /= zoomRatio;
-			case '0' : return scale = 1;
+			case '=' : return viewport.scale *= zoomRatio;
+			case '+' : return viewport.scale *= zoomRatio;
+			case '-' : return viewport.scale /= zoomRatio;
+			case '_' : return viewport.scale /= zoomRatio;
+			case '0' : return viewport.scale = 1;
 
 			case 'Escape' : return refinery.send('clearCells')
 		}
@@ -45,16 +40,16 @@
 
 <section
 	style:--cols={gridSize[0]}
-	style:--x="{x}px"
-	style:--y="{y}px"
-	style:--scale={scale}
+	style:--x="{viewport.x}px"
+	style:--y="{viewport.y}px"
+	style:--scale={viewport.scale}
 	onpointermove={handlePointerMove}
 	onpointerdown={(e) => refinery.send('selectCell', e)}
 	onpointerover={(e) => refinery.send('selectCell', e)}
 >
 	<div class="inner">
 		{#each cells as _, index}
-			<DataCell {index} {cursor} selected={selectedCells.has(index)} gridScale={scale} />
+			<DataCell {index} {cursor} selected={selectedCells.has(index)} />
 		{/each}
 	</div>
 </section>

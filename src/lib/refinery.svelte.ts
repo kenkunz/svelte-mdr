@@ -1,6 +1,9 @@
 import { SvelteSet } from 'svelte/reactivity';
 import { FiniteStateMachine } from 'runed';
+import { Viewport } from './viewport.svelte';
 import { BinManager } from './bin-manager.svelte';
+
+export const viewport = new Viewport();
 
 export const selectedCells = new SvelteSet<number>();
 

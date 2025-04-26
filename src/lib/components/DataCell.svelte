@@ -10,7 +10,7 @@
 		getNodeDistance,
 		scaleDistance
 	} from '$lib/helpers';
-	import { refinery, binManager } from '$lib/refinery.svelte';
+	import { refinery, viewport, binManager } from '$lib/refinery.svelte';
 
 	interface CellInfo {
 		value: number;
@@ -23,10 +23,9 @@
 		index: number;
 		cursor: Coordinate;
 		selected: boolean;
-		gridScale: number;
 	}
 
-	let { index, cursor, selected, gridScale } = $props();
+	let { index, cursor, selected }: Props = $props();
 
 	let element: HTMLDivElement | undefined = $state();
 
@@ -73,7 +72,7 @@
 		if (!binManager.selectedBin) return {};
 
 		const distance = getNodeDistance(node, binManager.selectedBin);
-		const { dx, dy, magnitude } = scaleDistance(distance, gridScale);
+		const { dx, dy, magnitude } = scaleDistance(distance, viewport.scale);
 
 		return {
 			duration: magnitude * 1.5,
