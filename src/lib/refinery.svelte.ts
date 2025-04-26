@@ -15,6 +15,10 @@ export const refinery = new FiniteStateMachine('ready', {
 			viewport.translate(coordinate);
 		},
 
+		zoomViewport(direction) {
+			viewport.zoom(direction);
+		},
+
 		selectCell(event) {
 			if (!(event instanceof PointerEvent && event.target instanceof HTMLElement)) return;
 			const { index } = event.target.dataset;

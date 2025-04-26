@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Coordinate } from '$lib/coordinate';
-	import { gridSize, zoomRatio } from '$lib/settings';
+	import { gridSize } from '$lib/settings';
 	import { refinery, viewport, selectedCells } from '$lib/refinery.svelte';
 	import DataCell from './DataCell.svelte';
 
@@ -24,21 +24,17 @@
 		refinery.send('panViewport', { x, y });
 	}
 
+	function zoom(key: string) {
+		let zoom = 0;
+		if (['=', '+'].includes(key)) zoom = 1;
+		if (['-', '_'].includes(key)) zoom = -1;
+		refinery.send('zoomViewport', zoom);
+	}
+
 	function handleKeyUp({ key }: KeyboardEvent) {
-		if (key.startsWith('Arrow')) {
-			pan(key.replace('Arrow', ''));
-		}
-
-		// prettier-ignore
-		switch (key) {
-			case '=' : return viewport.scale *= zoomRatio;
-			case '+' : return viewport.scale *= zoomRatio;
-			case '-' : return viewport.scale /= zoomRatio;
-			case '_' : return viewport.scale /= zoomRatio;
-			case '0' : return viewport.scale = 1;
-
-			case 'Escape' : return refinery.send('clearCells')
-		}
+		if (key === 'Escape') refinery.send('clearCells');
+		if (key.startsWith('Arrow')) pan(key.replace('Arrow', ''));
+		if (['=', '+', '-', '_', '0'].includes(key)) zoom(key);
 	}
 
 	function handlePointerMove(event: PointerEvent) {

@@ -1,4 +1,4 @@
-import { translatePx } from './settings';
+import { translatePx, zoomRatio } from './settings';
 import { isCoordinate } from './coordinate';
 
 export class Viewport {
@@ -12,5 +12,15 @@ export class Viewport {
 		}
 		this.x += coordinate.x * translatePx;
 		this.y += coordinate.y * translatePx;
+	}
+
+	zoom(direction: unknown) {
+		if (![0, 1, -1].includes(Number(direction))) {
+			throw new Error(`Invalid zoom direction: ${direction}`);
+		}
+
+		if (direction === 0) this.scale = 1;
+		if (direction === 1) this.scale *= zoomRatio;
+		if (direction === -1) this.scale /= zoomRatio;
 	}
 }
