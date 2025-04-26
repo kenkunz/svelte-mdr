@@ -1,7 +1,4 @@
-export interface Coordinate {
-	x: number;
-	y: number;
-}
+import type { Coordinate } from './coordinate';
 
 export interface DistanceVector {
 	dx: number;

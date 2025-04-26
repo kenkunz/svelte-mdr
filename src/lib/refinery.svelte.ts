@@ -1,7 +1,7 @@
 import { SvelteSet } from 'svelte/reactivity';
 import { FiniteStateMachine } from 'runed';
-import { Viewport } from './viewport.svelte';
-import { BinManager } from './bin-manager.svelte';
+import { Viewport } from '$lib/viewport.svelte';
+import { BinManager } from '$lib/bin-manager.svelte';
 
 export const viewport = new Viewport();
 
@@ -11,6 +11,10 @@ export const binManager = new BinManager();
 
 export const refinery = new FiniteStateMachine('ready', {
 	ready: {
+		panViewport(coordinate) {
+			viewport.translate(coordinate);
+		},
+
 		selectCell(event) {
 			if (!(event instanceof PointerEvent && event.target instanceof HTMLElement)) return;
 			const { index } = event.target.dataset;

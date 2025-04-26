@@ -1,6 +1,6 @@
 <script lang="ts">
-	import type { Coordinate } from '$lib/helpers';
-	import { gridSize, translatePx, zoomRatio } from '$lib/settings';
+	import type { Coordinate } from '$lib/coordinate';
+	import { gridSize, zoomRatio } from '$lib/settings';
 	import { refinery, viewport, selectedCells } from '$lib/refinery.svelte';
 	import DataCell from './DataCell.svelte';
 
@@ -12,14 +12,25 @@
 		cells = Array.from({ length: gridSize[0] * gridSize[1] });
 	});
 
+	function pan(direction: string) {
+		let x = 0;
+		let y = 0;
+
+		if (direction === 'Right') x = -1;
+		if (direction === 'Left') x = 1;
+		if (direction === 'Up') y = 1;
+		if (direction === 'Down') y = -1;
+
+		refinery.send('panViewport', { x, y });
+	}
+
 	function handleKeyUp({ key }: KeyboardEvent) {
+		if (key.startsWith('Arrow')) {
+			pan(key.replace('Arrow', ''));
+		}
+
 		// prettier-ignore
 		switch (key) {
-			case 'ArrowRight' : return viewport.x -= translatePx;
-			case 'ArrowLeft'  : return viewport.x += translatePx;
-			case 'ArrowUp'    : return viewport.y += translatePx;
-			case 'ArrowDown'  : return viewport.y -= translatePx;
-
 			case '=' : return viewport.scale *= zoomRatio;
 			case '+' : return viewport.scale *= zoomRatio;
 			case '-' : return viewport.scale /= zoomRatio;

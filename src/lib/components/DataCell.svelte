@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Coordinate } from '$lib/helpers';
+	import type { Coordinate } from '$lib/coordinate';
 	import { type TransitionConfig, fade } from 'svelte/transition';
 	import { cubicOut } from 'svelte/easing';
 	import { cursorRadius, maxScale, selectedScale } from '$lib/settings';
