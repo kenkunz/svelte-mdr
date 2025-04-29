@@ -9,8 +9,24 @@ export const selectedCells = new SvelteSet<number>();
 
 export const binManager = new BinManager();
 
-export const refinery = new FiniteStateMachine('ready', {
+type States = 'ready' | 'openingBin' | 'fillingBin' | 'showingBinStatus' | 'closingBin';
+
+type Actions =
+	| 'panViewport'
+	| 'zoomViewport'
+	| 'selectCell'
+	| 'clearCells'
+	| 'selectBin'
+	| 'addToBin'
+	| 'transitionEnded'
+	| 'done';
+
+export const refinery = new FiniteStateMachine<States, Actions>('ready', {
 	ready: {
+		_enter() {
+			binManager.selectedIndex = undefined;
+		},
+
 		panViewport(coordinate) {
 			viewport.translate(coordinate);
 		},
@@ -38,7 +54,7 @@ export const refinery = new FiniteStateMachine('ready', {
 	},
 
 	openingBin: {
-		done: 'fillingBin'
+		transitionEnded: 'fillingBin'
 	},
 
 	fillingBin: {
@@ -46,10 +62,6 @@ export const refinery = new FiniteStateMachine('ready', {
 			if (selectedCells.size === 0) {
 				refinery.debounce(500, 'done');
 			}
-		},
-
-		_exit() {
-			binManager.selectedIndex = undefined;
 		},
 
 		addToBin(index) {
@@ -60,10 +72,22 @@ export const refinery = new FiniteStateMachine('ready', {
 			binManager.selectedBin?.addItem();
 
 			if (selectedCells.size === 0) {
-				refinery.debounce(250, 'done');
+				refinery.debounce(500, 'done');
 			}
 		},
 
-		done: 'ready'
+		done: 'showingBinStatus'
+	},
+
+	showingBinStatus: {
+		transitionEnded() {
+			refinery.debounce(1500, 'done');
+		},
+
+		done: 'closingBin'
+	},
+
+	closingBin: {
+		transitionEnded: 'ready'
 	}
 });

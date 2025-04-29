@@ -2,10 +2,12 @@
 	import { fly } from 'svelte/transition';
 	import { refinery } from '$lib/refinery.svelte';
 	import BoxLid from './BoxLid.svelte';
+	import BinDrawer from './BinDrawer.svelte';
+	import { maxTemperCount } from '$lib/settings';
+	import { getRandomTemper } from '$lib/tempers';
 
 	const height = 14;
 	const duration = 500;
-	const maxItems = 50;
 
 	interface Props {
 		index: number;
@@ -16,11 +18,20 @@
 
 	let element: HTMLElement;
 
-	let items = $state(0);
+	let temperCounts = $state({
+		WO: 0,
+		FC: 0,
+		DR: 0,
+		MA: 0
+	});
 
-	let percentFull = $derived(items / maxItems);
+	let binCount = $derived(Object.values(temperCounts).reduce((sum, count) => sum + count, 0));
 
-	let open = $derived(selected && ['openingBin', 'fillingBin'].includes(refinery.current));
+	let percentFull = $derived(binCount / (maxTemperCount * 4));
+
+	let open = $derived(selected && refinery.current !== 'ready');
+
+	let showingStatus = $derived(selected && refinery.current === 'showingBinStatus');
 
 	let width = $state() as number;
 
@@ -29,22 +40,37 @@
 	}
 
 	export function addItem() {
-		items = Math.min(maxItems, items + 1);
+		const temper = getRandomTemper();
+		if (temperCounts[temper] < maxTemperCount) {
+			temperCounts[temper]++;
+		}
 	}
 </script>
 
-<div bind:this={element} class="bin" style:--height="{height}px" bind:offsetWidth={width}>
+<div
+	bind:this={element}
+	class="bin"
+	style:--height="{height}px"
+	style:--width="{width}px"
+	bind:offsetWidth={width}
+>
 	<div class="box">
-		<div class="front">{String(index).padStart(2, '0')}</div>
+		<div class="front">0{index}</div>
 		{#if open}
 			<div
 				class="rear-lid"
-				onintroend={() => refinery.send('done')}
+				onintroend={() => refinery.send('transitionEnded')}
 				transition:fly={{ duration, opacity: 1, y: height }}
 			></div>
 			<BoxLid {height} {width} {duration} side="left" />
 			<BoxLid {height} {width} {duration} side="right" />
 		{/if}
+		<BinDrawer
+			{index}
+			{temperCounts}
+			visible={showingStatus}
+			ontransitionend={() => refinery.send('transitionEnded')}
+		/>
 	</div>
 	<div class="progress">
 		<div class="bar" style:width="{percentFull * 100}%"></div>
