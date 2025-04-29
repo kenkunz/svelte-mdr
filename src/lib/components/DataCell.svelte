@@ -3,13 +3,8 @@
 	import { type TransitionConfig, fade } from 'svelte/transition';
 	import { cubicOut } from 'svelte/easing';
 	import { cursorRadius, maxScale, selectedScale } from '$lib/settings';
-	import {
-		randomInt,
-		getNodeMidpoint,
-		getDistance,
-		getNodeDistance,
-		scaleDistance
-	} from '$lib/helpers';
+	import { randomInt } from '$lib/random';
+	import { getNodeMidpoint, getDistance, getNodeDistance, scaleDistance } from '$lib/distance';
 	import { refinery, viewport, binManager } from '$lib/refinery.svelte';
 
 	interface CellInfo {
