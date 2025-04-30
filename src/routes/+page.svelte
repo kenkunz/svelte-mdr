@@ -3,9 +3,12 @@
 	import DataField from '$lib/components/DataField.svelte';
 	import Bins from '$lib/components/Bins.svelte';
 	import Footer from '$lib/components/Footer.svelte';
+	import cursorUrl from '$lib/assets/cursor.svg';
+
+	const cursor = `url("${cursorUrl}"), default`;
 </script>
 
-<main>
+<main style:cursor>
 	<Header />
 	<DataField />
 	<Bins />
