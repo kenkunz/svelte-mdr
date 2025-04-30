@@ -5,79 +5,84 @@
 	interface Props {
 		index: number;
 		temperCounts: TemperCounts;
-		visible: boolean;
+		open: boolean;
 		ontransitionend: (e: TransitionEvent) => void;
 	}
 
-	let { index, temperCounts, visible, ontransitionend }: Props = $props();
+	let { index, temperCounts, open, ontransitionend }: Props = $props();
 </script>
 
-<div class={['bin-status', visible && 'visible']} {ontransitionend}>
-	<h3>0{index}</h3>
-
-	<dl>
-		{#each tempers as temper}
-			{@const percentFull = temperCounts[temper] / maxTemperCount}
-			<div style:color="var(--color-{temper})">
-				<dt class={temper}>{temper}</dt>
-				<dd class={temper}>
-					<div style:width="{percentFull * 100}%"></div>
-				</dd>
-			</div>
-		{/each}
-	</dl>
+<div class="bin-drawer">
+	<div class={['inner', open && 'open']} {ontransitionend}>
+		<h3>0{index}</h3>
+		<dl>
+			{#each tempers as temper}
+				{@const percentFull = temperCounts[temper] / maxTemperCount}
+				<div style:color="var(--color-{temper})">
+					<dt class={temper}>{temper}</dt>
+					<dd class={temper}>
+						<div style:width="{percentFull * 100}%"></div>
+					</dd>
+				</div>
+			{/each}
+		</dl>
+	</div>
 </div>
 
 <style>
-	.bin-status {
-		border: var(--border);
+	.bin-drawer {
+		bottom: 100%;
 		width: 100%;
+		overflow: hidden;
+		pointer-events: none;
+	}
+
+	.inner {
+		border: var(--border);
 		padding: 0.5rem;
 		background: var(--body-bg);
-		clip-path: inset(0 0 100% 0);
-		transition: all 250ms ease-out;
+		transition: translate 250ms ease-out;
 
-		&.visible {
-			clip-path: inset(0 0 0 0);
-			translate: 0 calc(-100% + 4px);
+		&:not(.open) {
+			translate: 0 100%;
+		}
+	}
+
+	h3 {
+		margin: 0;
+		padding: 0.125rem;
+		font-size: inherit;
+		font-weight: medium;
+		border: var(--border);
+		display: grid;
+		justify-content: center;
+	}
+
+	dl {
+		margin-block: 1.5rem;
+		margin-left: 0.25rem;
+		display: grid;
+		gap: 1rem;
+		grid-template-columns: auto 1fr;
+		align-items: center;
+		font-size: 1.5rem;
+
+		> div {
+			display: contents;
 		}
 
-		h3 {
+		dt {
+			letter-spacing: 0.05em;
+		}
+
+		dd {
+			border: 2px solid currentColor;
 			margin: 0;
-			padding: 0.125rem;
-			font-size: inherit;
-			font-weight: medium;
-			border: var(--border);
-			display: grid;
-			justify-content: center;
-		}
+			height: 100%;
 
-		dl {
-			margin-block: 1.5rem;
-			margin-left: 0.25rem;
-			display: grid;
-			gap: 1rem;
-			grid-template-columns: auto 1fr;
-			align-items: center;
-			font-size: 1.5rem;
-
-			> div {
-				display: contents;
-			}
-
-			dt {
-				letter-spacing: 0.05em;
-			}
-
-			dd {
-				border: 2px solid currentColor;
-				margin: 0;
+			div {
 				height: 100%;
-
-				div {
-					height: 100%;
-					background: currentColor;
-				}
+				background: currentColor;
 			}
 		}
 	}

@@ -29,9 +29,9 @@
 
 	let percentFull = $derived(binCount / (maxTemperCount * 4));
 
-	let open = $derived(selected && refinery.current !== 'ready');
+	let binOpen = $derived(selected && refinery.current !== 'ready');
 
-	let showingStatus = $derived(selected && refinery.current === 'showingBinStatus');
+	let drawerOpen = $derived(selected && refinery.current === 'binDrawerOpen');
 
 	let width = $state() as number;
 
@@ -56,7 +56,7 @@
 >
 	<div class="box">
 		<div class="front">0{index}</div>
-		{#if open}
+		{#if binOpen}
 			<div
 				class="rear-lid"
 				onintroend={() => refinery.send('transitionEnded')}
@@ -64,13 +64,13 @@
 			></div>
 			<BoxLid {height} {width} {duration} side="left" />
 			<BoxLid {height} {width} {duration} side="right" />
+			<BinDrawer
+				{index}
+				{temperCounts}
+				open={drawerOpen}
+				ontransitionend={() => refinery.send('transitionEnded')}
+			/>
 		{/if}
-		<BinDrawer
-			{index}
-			{temperCounts}
-			visible={showingStatus}
-			ontransitionend={() => refinery.send('transitionEnded')}
-		/>
 	</div>
 	<div class="progress">
 		<div class="bar" style:width="{percentFull * 100}%"></div>

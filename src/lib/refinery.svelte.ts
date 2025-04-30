@@ -9,7 +9,7 @@ export const selectedCells = new SvelteSet<number>();
 
 export const binManager = new BinManager();
 
-type States = 'ready' | 'openingBin' | 'fillingBin' | 'showingBinStatus' | 'closingBin';
+type States = 'ready' | 'openingBin' | 'fillingBin' | 'binDrawerOpen' | 'closingBin';
 
 type Actions =
 	| 'panViewport'
@@ -76,12 +76,12 @@ export const refinery = new FiniteStateMachine<States, Actions>('ready', {
 			}
 		},
 
-		done: 'showingBinStatus'
+		done: 'binDrawerOpen'
 	},
 
-	showingBinStatus: {
+	binDrawerOpen: {
 		transitionEnded() {
-			refinery.debounce(1500, 'done');
+			refinery.debounce(1000, 'done');
 		},
 
 		done: 'closingBin'
