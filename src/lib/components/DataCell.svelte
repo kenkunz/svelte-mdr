@@ -67,10 +67,10 @@
 		if (!binManager.selectedBin) return {};
 
 		const distance = getNodeDistance(node, binManager.selectedBin);
-		const { dx, dy, magnitude } = scaleDistance(distance, viewport.scale);
+		const { dx, dy } = scaleDistance(distance, viewport.scale);
 
 		return {
-			duration: magnitude * 1.5,
+			duration: distance.magnitude * 1.25,
 			css: (_, u) => `translate: ${dx * cubicOut(u)}px ${dy * u}px`
 		};
 	}
