@@ -1,9 +1,13 @@
 <script lang="ts">
+	import { binManager } from '$lib/refinery.svelte';
 	import LumonLogo from '$lib/assets/lumon-logo.svg?raw';
 </script>
 
 <header>
-	<h1>Svelte Summit</h1>
+	<div class="inner">
+		<div class="progress" style:width="{binManager.percentComplete * 100}%"></div>
+		<h1>Svelte Summit</h1>
+	</div>
 	{@html LumonLogo}
 </header>
 
@@ -15,14 +19,32 @@
 		grid-template-columns: 1fr auto;
 		align-items: center;
 
+		.inner {
+			display: grid;
+			align-items: center;
+
+			height: 100px;
+			translate: 0 -1.5px;
+
+			> * {
+				grid-area: 1 / -1;
+				height: 100%;
+			}
+		}
+
+		.progress {
+			background: currentColor;
+			opacity: 0.5;
+			transition: width 0.1s ease-out;
+		}
+
 		h1 {
+			display: grid;
+			align-items: center;
+
 			border: var(--border);
 			border-right: none;
 			margin-right: -3rem;
-			translate: 0 -1.5px;
-			height: 100px;
-			display: grid;
-			align-items: center;
 			padding-inline: 0.5rem;
 			font-size: 4em;
 			white-space: nowrap;
