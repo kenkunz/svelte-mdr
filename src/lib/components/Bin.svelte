@@ -45,6 +45,10 @@
 			temperCounts[temper]++;
 		}
 	}
+
+	export function getBinCount() {
+		return binCount;
+	}
 </script>
 
 <div

@@ -1,3 +1,4 @@
+import { maxTemperCount } from './settings';
 import Bin from './components/Bin.svelte';
 
 const INDICES = [1, 2, 3, 4, 5] as const;
@@ -14,6 +15,14 @@ export class BinManager {
 
 	get selectedBin() {
 		return this.selectedIndex && this.instances[this.selectedIndex];
+	}
+
+	get percentComplete() {
+		const bins = Object.values(this.instances);
+		const totalBinned = bins.reduce((sum, bin) => {
+			return sum + bin.getBinCount();
+		}, 0);
+		return totalBinned / (maxTemperCount * 4 * bins.length);
 	}
 
 	selectBin(value: unknown) {
