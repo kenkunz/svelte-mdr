@@ -1,22 +1,22 @@
 <script lang="ts">
-	import { binManager } from '$lib/refinery.svelte';
+	import { percentComplete } from '$lib/refinery.svelte';
 	import LumonLogo from '$lib/assets/lumon-logo.svg?raw';
 	import { formatPercent } from '$lib/formatters';
 
-	let percentComplete = $derived(formatPercent(binManager.percentComplete));
-	let progressSlots = $derived(Math.ceil(binManager.percentComplete * 50));
+	let formattedPctComplete = $derived(formatPercent(percentComplete.current));
+	let progressSlots = $derived(Math.ceil(percentComplete.current * 50));
 </script>
 
 <header>
 	<div class="inner">
-		<ul class="progress" style:--progress={percentComplete}>
+		<ul class="progress" style:--progress={formattedPctComplete}>
 			{#each { length: progressSlots } as _, index}
 				<li style:--index={index}></li>
 			{/each}
 		</ul>
 		<h1>Svelte Summit</h1>
 		<h2>
-			{percentComplete} Complete
+			{formattedPctComplete} Complete
 		</h2>
 	</div>
 	{@html LumonLogo}
