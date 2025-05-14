@@ -5,6 +5,7 @@
 	import BinDrawer from './BinDrawer.svelte';
 	import { maxTemperCount } from '$lib/settings';
 	import { getRandomTemper } from '$lib/tempers';
+	import { formatPercent } from '$lib/formatters';
 
 	const height = 20;
 	const duration = 500;
@@ -27,7 +28,7 @@
 
 	let binCount = $derived(Object.values(temperCounts).reduce((sum, count) => sum + count, 0));
 
-	let percentFull = $derived(binCount / (maxTemperCount * 4));
+	let percentFull = $derived(formatPercent(binCount / (maxTemperCount * 4)));
 
 	let binOpen = $derived(selected && refinery.current !== 'ready');
 
@@ -77,8 +78,8 @@
 		{/if}
 	</div>
 	<div class="progress">
-		<div class="bar" style:width="{percentFull * 100}%"></div>
-		<div class="value">{percentFull.toLocaleString('en-us', { style: 'percent' })}</div>
+		<div class="bar" style:width={percentFull}></div>
+		<div class="value">{percentFull}</div>
 	</div>
 </div>
 

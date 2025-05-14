@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { maxTemperCount } from '$lib/settings';
 	import { type TemperCounts, tempers } from '$lib/tempers';
+	import { formatPercent } from '$lib/formatters';
 
 	interface Props {
 		index: number;
@@ -17,11 +18,10 @@
 		<h3>0{index}</h3>
 		<dl>
 			{#each tempers as temper}
-				{@const percentFull = temperCounts[temper] / maxTemperCount}
 				<div style:color="var(--color-{temper})">
 					<dt class={temper}>{temper}</dt>
 					<dd class={temper}>
-						<div style:width="{percentFull * 100}%"></div>
+						<div style:width={formatPercent(temperCounts[temper] / maxTemperCount)}></div>
 					</dd>
 				</div>
 			{/each}

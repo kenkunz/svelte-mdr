@@ -22,7 +22,7 @@ export class BinManager {
 		const totalBinned = bins.reduce((sum, bin) => {
 			return sum + bin.getBinCount();
 		}, 0);
-		return totalBinned / (maxTemperCount * 4 * bins.length);
+		return totalBinned / (maxTemperCount * 4 * bins.length) || 0;
 	}
 
 	selectBin(value: unknown) {
