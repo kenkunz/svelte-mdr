@@ -50,7 +50,7 @@
 		top: 2px;
 		overflow: visible;
 		fill: none;
-		stroke: currentColor;
+		stroke: var(--color-fg);
 		stroke-width: 4;
 		stroke-linejoin: round;
 		translate: calc(var(--flip) * -1px) calc(-1 * var(--height));
@@ -62,7 +62,7 @@
 		}
 
 		path {
-			fill: var(--body-bg);
+			fill: var(--color-bg);
 		}
 	}
 </style>

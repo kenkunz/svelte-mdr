@@ -19,7 +19,7 @@
 	main {
 		height: 100vh;
 		display: grid;
-		grid-template-rows: 12rem 1fr 9rem 4rem;
-		--border: 4px solid currentColor;
+		grid-template-rows: 9rem 1fr 9rem 4rem;
+		--border: 3px solid var(--color-fg);
 	}
 </style>

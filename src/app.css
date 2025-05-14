@@ -2,21 +2,22 @@
 
 :root {
 	font-family: Rubik, sans-serif;
-}
 
-body {
-	/* main background color (needed as fill color in various places) */
-	--body-bg: hsl(212 50% 12%);
+	/* main background and foreground colors */
+	--color-bg: hsl(212 50% 12%);
+	--color-fg: hsl(195 50% 80%);
 
 	/* four tempers colors */
 	--color-WO: hsl(165 80% 75%);
 	--color-FC: hsl(60 80% 95%);
 	--color-DR: hsl(320 90% 90%);
 	--color-MA: hsl(195 90% 70%);
+}
 
+body {
 	margin: 0;
-	background: var(--body-bg);
-	color: hsl(195 50% 80%);
+	background: var(--color-bg);
+	color: var(--color-fg);
 }
 
 *,

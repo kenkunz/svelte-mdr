@@ -129,7 +129,7 @@
 
 		.bar {
 			height: 100%;
-			background: currentColor;
+			background: var(--color-fg);
 			transition: width 0.1s ease-out;
 		}
 

@@ -40,7 +40,7 @@
 	.inner {
 		border: var(--border);
 		padding: 0.5rem;
-		background: var(--body-bg);
+		background: var(--color-bg);
 		transition: translate 250ms ease-out;
 
 		&:not(.open) {
