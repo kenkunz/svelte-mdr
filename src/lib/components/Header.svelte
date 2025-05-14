@@ -14,7 +14,9 @@
 			{/each}
 		</ul>
 		<h1>Svelte Summit</h1>
-		<h2>{percentComplete.toLocaleString('en-us', { style: 'percent' })} Complete</h2>
+		<h2>
+			{percentComplete.toLocaleString('en-us', { style: 'percent', roundingMode: 'floor' })} Complete
+		</h2>
 	</div>
 	{@html LumonLogo}
 </header>
@@ -73,16 +75,23 @@
 		}
 
 		h2 {
-			margin-right: calc(var(--logo-overlap) + 2.5rem);
+			margin-right: calc(var(--logo-overlap) + 2rem);
 			text-align: right;
 			color: var(--color-bg);
-			-webkit-text-stroke: var(--color-fg) 0.2rem;
+			-webkit-text-stroke: var(--color-fg) 2.5px;
 		}
 
 		:global(svg) {
 			height: 112px;
-			fill: var(--color-fg);
 			translate: 0 1px;
+
+			:global(.bg) {
+				fill: var(--color-bg);
+			}
+
+			:global(.fg) {
+				fill: var(--color-fg);
+			}
 		}
 	}
 </style>
