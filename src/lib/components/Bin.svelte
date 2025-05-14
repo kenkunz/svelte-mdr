@@ -6,7 +6,7 @@
 	import { maxTemperCount } from '$lib/settings';
 	import { getRandomTemper } from '$lib/tempers';
 
-	const height = 14;
+	const height = 20;
 	const duration = 500;
 
 	interface Props {
@@ -89,7 +89,7 @@
 		min-width: 8rem;
 		max-width: 20rem;
 		display: grid;
-		grid-template-rows: 5fr 4fr;
+		grid-template-rows: 1fr 1fr;
 		gap: var(--space);
 		padding-block: var(--space);
 		font-size: 1.8rem;
@@ -114,8 +114,11 @@
 
 	.rear-lid {
 		border-top: var(--border);
+		background: var(--color-bg);
 		width: 100%;
-		top: calc(-1 * var(--height) + 1px);
+		height: var(--height);
+		translate: 0 -100%;
+		z-index: -1;
 	}
 
 	.progress {
