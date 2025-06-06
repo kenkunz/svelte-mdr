@@ -1,38 +1,35 @@
-# sv
+# Svelte MDR
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+<p align="center">
+  <strong>The Lumon Macrodata Refinement interface.</strong>
+</p>
 
-## Creating a project
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="/static/lumon-logo-dark.svg">
+    <img alt="Lumon logo" src="/static/lumon-logo-light.svg" width="303" height="154">
+  </picture>
+</p>
 
-If you're seeing this, you've probably already done this step. Congrats!
+<p align="center">
+  <strong>Built with Svelte.</strong>
+</p>
 
-```bash
-# create a new project in the current directory
-npx sv create
+## Live demo
 
-# create a new project in my-app
-npx sv create my-app
-```
+**[mdr.kenthropic.com](https://mdr.kenthropic.com/)**
 
-## Developing
+[svelte-mdr.webm](https://github.com/user-attachments/assets/1ea099db-db92-4409-82ba-f424b38d6fa8)
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+## Project Setup
 
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
+To run this project locally, make sure you have [Node.js](https://nodejs.org/) v22 or greater
+and [pnpm](https://pnpm.io/) insalled. Then…
 
 ```bash
-npm run build
+# install dependencies
+pnpm install
+
+# start the dev server
+pnpm dev
 ```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
